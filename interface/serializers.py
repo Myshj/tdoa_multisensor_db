@@ -1,5 +1,6 @@
 from .models import Position, Sensor
 from rest_framework import serializers
+from enumfields import EnumField
 
 
 class PositionSerializer(serializers.HyperlinkedModelSerializer):
@@ -11,4 +12,4 @@ class PositionSerializer(serializers.HyperlinkedModelSerializer):
 class SensorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Sensor
-        fields = ('position', 'radius', 'heartbeat_interval')
+        fields = ('position', 'radius', 'heartbeat_interval', 'state')
