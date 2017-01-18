@@ -30,9 +30,10 @@ class Sensor(models.Model):
     radius = models.FloatField(default=150)
     heartbeat_interval = models.PositiveSmallIntegerField(default=10)
     state = models.CharField(max_length=10, choices=(
-        ('ok', 'ok'),
+        ('working', 'working'),
+        ('waiting', 'waiting'),
         ('broken', 'broken')
-    ), default='ok')
+    ), default='working')
 
     def __str__(self):
         return 'Sensor(position={0})'.format(self.position)
