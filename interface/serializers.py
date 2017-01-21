@@ -1,6 +1,5 @@
 from .models import Position, Sensor, SoundSource, World
 from rest_framework import serializers
-from enumfields import EnumField
 
 
 class PositionSerializer(serializers.HyperlinkedModelSerializer):
