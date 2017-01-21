@@ -47,7 +47,7 @@ class Sensor(models.Model):
         ('waiting', 'waiting'),
         ('broken', 'broken')
     ), default='working')
-    world = models.ForeignKey(World, null=True, blank=True)
+    world = models.ForeignKey(World)
 
     def __str__(self):
         return 'Sensor(position={0})'.format(self.position)
@@ -69,7 +69,7 @@ class SoundSource(models.Model):
         ('waiting', 'waiting'),
         ('broken', 'broken')
     ), default='working')
-    world = models.ForeignKey(World, null=True, blank=True)
+    world = models.ForeignKey(World)
 
     def __str__(self):
         return 'SoundSource(position={0})'.format(self.position)
