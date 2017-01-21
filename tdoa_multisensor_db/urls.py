@@ -21,6 +21,7 @@ from interface import views
 router = routers.DefaultRouter()
 router.register(r'positions', views.PositionViewSet)
 router.register(r'sensors', views.SensorViewSet)
+router.register(r'sound_sources', views.SoundSourceViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

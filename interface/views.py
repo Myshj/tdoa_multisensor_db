@@ -1,6 +1,6 @@
-from .models import Position, Sensor
+from .models import Position, Sensor, SoundSource
 from rest_framework import viewsets
-from .serializers import PositionSerializer, SensorSerializer
+from .serializers import PositionSerializer, SensorSerializer, SoundSourceSerializer
 
 
 class PositionViewSet(viewsets.ModelViewSet):
@@ -13,3 +13,8 @@ class PositionViewSet(viewsets.ModelViewSet):
 class SensorViewSet(viewsets.ModelViewSet):
     queryset = Sensor.objects.all()
     serializer_class = SensorSerializer
+
+
+class SoundSourceViewSet(viewsets.ModelViewSet):
+    queryset = SoundSource.objects.all()
+    serializer_class = SoundSourceSerializer

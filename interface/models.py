@@ -37,3 +37,24 @@ class Sensor(models.Model):
 
     def __str__(self):
         return 'Sensor(position={0})'.format(self.position)
+
+
+class SoundSource(models.Model):
+    """
+    Информация об источнике звука.
+
+    position - позиция в пространстве
+    interval - интервал в секундах между генерациями сигнала
+    state - текущее состояние
+    """
+
+    position = models.ForeignKey(Position)
+    interval = models.FloatField(default=10)
+    state = models.CharField(max_length=10, choices=(
+        ('working', 'working'),
+        ('waiting', 'waiting'),
+        ('broken', 'broken')
+    ), default='working')
+
+    def __str__(self):
+        return 'SoundSource(position={0})'.format(self.position)
