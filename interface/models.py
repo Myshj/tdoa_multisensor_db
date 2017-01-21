@@ -16,6 +16,20 @@ class Position(models.Model):
         return 'Position(x={0}, y={1}, z={2})'.format(self.x, self.y, self.z)
 
 
+class World(models.Model):
+    """
+    Информация о среде, к которой прикреплены сенсоры и источники звука.
+
+    name - название мира.
+    speed_of_sound - скорость звука в метрах в секунду
+    """
+    name = models.CharField(max_length=100)
+    speed_of_sound = models.FloatField(default=340.29)
+
+    def __str__(self):
+        return 'World(name={0}, speed_of_sound={1})'.format(self.name, self.speed_of_sound)
+
+
 class Sensor(models.Model):
     """
     Информация о сенсоре.
@@ -34,6 +48,7 @@ class Sensor(models.Model):
         ('waiting', 'waiting'),
         ('broken', 'broken')
     ), default='working')
+    world = models.ForeignKey(World, null=True, blank=True)
 
     def __str__(self):
         return 'Sensor(position={0})'.format(self.position)
@@ -55,6 +70,7 @@ class SoundSource(models.Model):
         ('waiting', 'waiting'),
         ('broken', 'broken')
     ), default='working')
+    world = models.ForeignKey(World, null=True, blank=True)
 
     def __str__(self):
         return 'SoundSource(position={0})'.format(self.position)

@@ -22,6 +22,7 @@ router = routers.DefaultRouter()
 router.register(r'positions', views.PositionViewSet)
 router.register(r'sensors', views.SensorViewSet)
 router.register(r'sound_sources', views.SoundSourceViewSet)
+router.register(r'worlds', views.WorldViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
