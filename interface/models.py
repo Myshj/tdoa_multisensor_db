@@ -36,6 +36,7 @@ class Sensor(models.Model):
     position - позиция в пространстве
     radius - радиус действия (в метрах)
     heartbeat_interval - интервал в секундах между докладами о работоспособности
+    failure_probability - вероятность поломки в каждую секунду
     state - текущее состояние
     """
 
@@ -47,6 +48,7 @@ class Sensor(models.Model):
         ('waiting', 'waiting'),
         ('broken', 'broken')
     ), default='working')
+    failure_probability = models.FloatField(default=0.01)
     world = models.ForeignKey(World)
 
     def __str__(self):

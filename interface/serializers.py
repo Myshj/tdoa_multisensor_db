@@ -11,7 +11,7 @@ class PositionSerializer(serializers.HyperlinkedModelSerializer):
 class SensorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Sensor
-        fields = ('id', 'position', 'radius', 'heartbeat_interval', 'state', 'world')
+        fields = ('id', 'position', 'radius', 'heartbeat_interval', 'state', 'failure_probability', 'world')
 
 
 class SoundSourceSerializer(serializers.HyperlinkedModelSerializer):
