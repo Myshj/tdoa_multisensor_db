@@ -48,21 +48,12 @@ class NetworkAdapter(WorldRelated):
     """
     Информация о сетевом адаптере.
     """
+
     def __str__(self):
         return 'NetworkAdapter(position={0})'.format(self.position)
 
 
-class HasNetworkAdapter(WorldRelated):
-    """
-    Информация о том, что кто-то имеет сетевой адаптер.
-    """
-    adapter = models.ForeignKey(NetworkAdapter, null=True)
-
-    class Meta:
-        abstract = True
-
-
-class Sensor(HasNetworkAdapter):
+class Sensor(WorldRelated):
     """
     Информация о сенсоре.
 
@@ -82,7 +73,46 @@ class Sensor(HasNetworkAdapter):
     failure_probability = models.FloatField(default=0.01)
 
     def __str__(self):
-        return 'Sensor(position={0}, adapter={1})'.format(self.position, self.adapter_id)
+        return 'Sensor(position={0})'.format(self.position)
+
+
+class Computer(WorldRelated):
+    """
+    Информация о компьютере.
+
+    sensors - с каких датчиков напрямую поступают данные
+    network_adapters - какие подключены сетевые адаптеры
+    """
+    sensors = models.ManyToManyField(Sensor)
+    network_adapters = models.ManyToManyField(NetworkAdapter)
+
+    def __str__(self):
+        return 'Computer(position={0})'.format(self.position)
+
+
+class SoftwareState(models.Model):
+    """
+    Информация о том, какое ПО активно на компьютере.
+
+    computer - о каком компьютере идёт речь
+    software - о каком ПО идёт речь
+    is_active - активно ли данное ПО на данном компьютере
+    """
+    computer = models.ForeignKey(Computer)
+    software = models.CharField(max_length=50, choices=(
+        ('sensor_controller', 'sensor_controller'),
+        ('tdoa_controller', 'tdoa_controller'),
+        ('tdoa_locator', 'tdoa_locator')
+    ), default='sensor_controller')
+    is_active = models.BooleanField()
+
+    def __str__(self):
+        return 'SoftwareState(computer_id={0}, software={1}, is_active={2})'.format(self.computer_id,
+                                                                                    self.software,
+                                                                                    self.is_active)
+
+    class Meta:
+        unique_together = (('computer', 'software',),)
 
 
 class SoundSource(WorldRelated):

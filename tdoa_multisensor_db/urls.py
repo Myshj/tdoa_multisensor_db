@@ -24,9 +24,9 @@ router.register(r'sensors', views.SensorViewSet)
 router.register(r'sound_sources', views.SoundSourceViewSet)
 router.register(r'worlds', views.WorldViewSet)
 
-# router.register(r'world_related', views.WorldRelatedViewSet)
+router.register(r'computers', views.ComputerViewSet)
 router.register(r'network_adapters', views.NetworkAdapterViewSet)
-# router.register(r'has_network_adapters', views.HasNetworkAdapterViewSet) abstract
+router.register(r'software_states', views.SoftwareStateViewSet)
 router.register(r'int_bounds', views.IntBoundViewSet)
 
 router.register(r'int_intervals', views.IntIntervalViewSet)
@@ -36,7 +36,3 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls))
 ]
-
-
-# (Position, Sensor, SoundSource, World, WorldRelated, NetworkAdapter, HasNetworkAdapter, IntBound,
-#                      IntInterval, NetworkConnection)

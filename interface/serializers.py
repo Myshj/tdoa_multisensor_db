@@ -1,5 +1,5 @@
-from .models import (Position, Sensor, SoundSource, World, WorldRelated, NetworkAdapter, HasNetworkAdapter, IntBound,
-                     IntInterval, NetworkConnection)
+from .models import (Position, Sensor, SoundSource, World, WorldRelated, NetworkAdapter, IntBound, Computer,
+                     IntInterval, NetworkConnection, SoftwareState)
 from rest_framework import serializers
 
 
@@ -21,12 +21,6 @@ class NetworkAdapterSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'position', 'world')
 
 
-class HasNetworkAdapterSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = HasNetworkAdapter
-        fields = ('id', 'network_adapter')
-
-
 class IntBoundSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = IntBound
@@ -39,6 +33,18 @@ class IntIntervalSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'lower_bound', 'upper_bound')
 
 
+class ComputerSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Computer
+        fields = ('id', 'sensors', 'network_adapters')
+
+
+class SoftwareStateSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = SoftwareState
+        fields = ('id', 'computer', 'software', 'is_active')
+
+
 class NetworkConnectionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = NetworkConnection
@@ -48,7 +54,7 @@ class NetworkConnectionSerializer(serializers.HyperlinkedModelSerializer):
 class SensorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Sensor
-        fields = ('id', 'radius', 'heartbeat_interval', 'state', 'failure_probability', 'position', 'world', 'adapter')
+        fields = ('id', 'radius', 'heartbeat_interval', 'state', 'failure_probability', 'position', 'world')
 
 
 class SoundSourceSerializer(serializers.HyperlinkedModelSerializer):

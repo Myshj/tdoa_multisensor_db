@@ -1,10 +1,9 @@
-from .models import (Position, Sensor, SoundSource, World, WorldRelated, NetworkAdapter, HasNetworkAdapter, IntBound,
+from .models import (Position, Sensor, SoundSource, World, Computer, NetworkAdapter, SoftwareState, IntBound,
                      IntInterval, NetworkConnection)
 from rest_framework import viewsets
-from .serializers import (PositionSerializer, SensorSerializer, SoundSourceSerializer, WorldSerializer,
-                          HasNetworkAdapterSerializer, IntBoundSerializer, IntIntervalSerializer,
-                          NetworkAdapterSerializer,
-                          NetworkConnectionSerializer, WorldRelatedSerializer)
+from .serializers import (PositionSerializer, SensorSerializer, SoundSourceSerializer, WorldSerializer, ComputerSerializer,
+                          IntBoundSerializer, IntIntervalSerializer, NetworkAdapterSerializer,
+                          NetworkConnectionSerializer, SoftwareStateSerializer)
 
 
 class PositionViewSet(viewsets.ModelViewSet):
@@ -27,9 +26,14 @@ class WorldViewSet(viewsets.ModelViewSet):
     serializer_class = WorldSerializer
 
 
-# class HasNetworkAdapterViewSet(viewsets.ModelViewSet):
-#     queryset = HasNetworkAdapter.objects.all()
-#     serializer_class = HasNetworkAdapterSerializer
+class ComputerViewSet(viewsets.ModelViewSet):
+    queryset = Computer.objects.all()
+    serializer_class = ComputerSerializer
+
+
+class SoftwareStateViewSet(viewsets.ModelViewSet):
+    queryset = SoftwareState.objects.all()
+    serializer_class = SoftwareStateSerializer
 
 
 class IntBoundViewSet(viewsets.ModelViewSet):
@@ -50,7 +54,6 @@ class NetworkAdapterViewSet(viewsets.ModelViewSet):
 class NetworkConnectionViewSet(viewsets.ModelViewSet):
     queryset = NetworkConnection.objects.all()
     serializer_class = NetworkConnectionSerializer
-
 
 # class WorldRelatedViewSet(viewsets.ModelViewSet):
 #     queryset = WorldRelated.objects.all()
