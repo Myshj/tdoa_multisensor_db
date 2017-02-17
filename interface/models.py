@@ -29,18 +29,49 @@ class World(models.Model):
         return 'World(name={0}, speed_of_sound={1})'.format(self.name, self.speed_of_sound)
 
 
-class Sensor(models.Model):
+class WorldRelated(models.Model):
+    """
+    Информация о принадлежности к миру.
+
+    position - позиция в пространстве
+    world - к какому миру относимся
+    """
+
+    position = models.ForeignKey(Position)
+    world = models.ForeignKey(World)
+
+    class Meta:
+        abstract = True
+
+
+class NetworkAdapter(WorldRelated):
+    """
+    Информация о сетевом адаптере.
+    """
+    def __str__(self):
+        return 'NetworkAdapter(position={0})'.format(self.position)
+
+
+class HasNetworkAdapter(WorldRelated):
+    """
+    Информация о том, что кто-то имеет сетевой адаптер.
+    """
+    adapter = models.ForeignKey(NetworkAdapter, null=True)
+
+    class Meta:
+        abstract = True
+
+
+class Sensor(HasNetworkAdapter):
     """
     Информация о сенсоре.
 
-    position - позиция в пространстве
     radius - радиус действия (в метрах)
     heartbeat_interval - интервал в секундах между докладами о работоспособности
     failure_probability - вероятность поломки в каждую секунду
     state - текущее состояние
     """
 
-    position = models.ForeignKey(Position)
     radius = models.FloatField(default=150)
     heartbeat_interval = models.PositiveSmallIntegerField(default=10)
     state = models.CharField(max_length=10, choices=(
@@ -49,29 +80,78 @@ class Sensor(models.Model):
         ('broken', 'broken')
     ), default='working')
     failure_probability = models.FloatField(default=0.01)
-    world = models.ForeignKey(World)
 
     def __str__(self):
-        return 'Sensor(position={0})'.format(self.position)
+        return 'Sensor(position={0}, adapter={1})'.format(self.position, self.adapter_id)
 
 
-class SoundSource(models.Model):
+class SoundSource(WorldRelated):
     """
     Информация об источнике звука.
 
-    position - позиция в пространстве
     interval - интервал в секундах между генерациями сигнала
     state - текущее состояние
     """
 
-    position = models.ForeignKey(Position)
     interval = models.FloatField(default=10)
     state = models.CharField(max_length=10, choices=(
         ('working', 'working'),
         ('waiting', 'waiting'),
         ('broken', 'broken')
     ), default='working')
-    world = models.ForeignKey(World)
 
     def __str__(self):
         return 'SoundSource(position={0})'.format(self.position)
+
+
+class IntBound(models.Model):
+    """
+    Информация о целочисленной границе.
+
+    value - значение
+    bound_type - открытая млм закрытая граница
+    """
+    value = models.IntegerField()
+    bound_type = models.CharField(max_length=10, choices=(
+        ('inclusive', 'inclusive'),
+        ('exclusive', 'exclusive'),
+    ), default='inclusive')
+
+    def __str__(self):
+        return 'IntBound(value={0}, bound_type={1})'.format(self.value, self.bound_type)
+
+
+class IntInterval(models.Model):
+    """
+    Информация о целочисленном интервале.
+
+    lower_bound - нижняя граница интервала
+    upper_bound - верхняя граница интервала
+    """
+    lower_bound = models.ForeignKey(IntBound, related_name='lower_bound')
+    upper_bound = models.ForeignKey(IntBound, related_name='upper_bound')
+
+    def __str__(self):
+        return 'IntInterval(lower_bound={0}, upper_bound={1})'.format(self.lower_bound.value, self.upper_bound.value)
+
+
+class NetworkConnection(models.Model):
+    """
+    Информация о сетевом соединении между адаптерами.
+
+    adapter_from - начальные адаптер
+    adapter_to - конечный адаптер
+    possible_latency - границы возможной задержки передачи данных в милисекундах
+    """
+    adapter_from = models.ForeignKey(NetworkAdapter, related_name='adapter_from')
+    adapter_to = models.ForeignKey(NetworkAdapter, related_name='adapter_to')
+    possible_latency = models.ForeignKey(IntInterval)
+
+    def __str__(self):
+        return """
+        NetworkConnection(
+        adapter_from={0},
+        adapter_to={1},
+        possible_latency={2}
+        )
+        """.format(self.adapter_from_id, self.adapter_to_id, self.possible_latency)
