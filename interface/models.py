@@ -70,7 +70,7 @@ class Sensor(WorldRelated):
         ('waiting', 'waiting'),
         ('broken', 'broken')
     ), default='working')
-    failure_probability = models.FloatField(default=0.01)
+    failure_probability = models.FloatField(default=0.0001)
 
     def __str__(self):
         return 'Sensor(position={0})'.format(self.position)
@@ -86,33 +86,11 @@ class Computer(WorldRelated):
     sensors = models.ManyToManyField(Sensor)
     network_adapters = models.ManyToManyField(NetworkAdapter)
 
+    is_active_sensor_controller = models.BooleanField(default=False)
+    is_active_tdoa_controller = models.BooleanField(default=False)
+
     def __str__(self):
         return 'Computer(position={0})'.format(self.position)
-
-
-class SoftwareState(models.Model):
-    """
-    Информация о том, какое ПО активно на компьютере.
-
-    computer - о каком компьютере идёт речь
-    software - о каком ПО идёт речь
-    is_active - активно ли данное ПО на данном компьютере
-    """
-    computer = models.ForeignKey(Computer)
-    software = models.CharField(max_length=50, choices=(
-        ('sensor_controller', 'sensor_controller'),
-        ('tdoa_controller', 'tdoa_controller'),
-        ('tdoa_locator', 'tdoa_locator')
-    ), default='sensor_controller')
-    is_active = models.BooleanField()
-
-    def __str__(self):
-        return 'SoftwareState(computer_id={0}, software={1}, is_active={2})'.format(self.computer_id,
-                                                                                    self.software,
-                                                                                    self.is_active)
-
-    class Meta:
-        unique_together = (('computer', 'software',),)
 
 
 class SoundSource(WorldRelated):

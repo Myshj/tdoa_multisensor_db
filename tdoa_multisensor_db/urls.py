@@ -26,7 +26,6 @@ router.register(r'worlds', views.WorldViewSet)
 
 router.register(r'computers', views.ComputerViewSet)
 router.register(r'network_adapters', views.NetworkAdapterViewSet)
-router.register(r'software_states', views.SoftwareStateViewSet)
 router.register(r'int_bounds', views.IntBoundViewSet)
 
 router.register(r'int_intervals', views.IntIntervalViewSet)
@@ -34,5 +33,6 @@ router.register(r'network_connections', views.NetworkConnectionViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include(router.urls))
+    url(r'^api/', include(router.urls)),
+    url(r'reset/', views.reset)
 ]

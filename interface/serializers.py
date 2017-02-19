@@ -1,5 +1,5 @@
 from .models import (Position, Sensor, SoundSource, World, WorldRelated, NetworkAdapter, IntBound, Computer,
-                     IntInterval, NetworkConnection, SoftwareState)
+                     IntInterval, NetworkConnection)
 from rest_framework import serializers
 
 
@@ -36,13 +36,7 @@ class IntIntervalSerializer(serializers.HyperlinkedModelSerializer):
 class ComputerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Computer
-        fields = ('id', 'sensors', 'network_adapters')
-
-
-class SoftwareStateSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = SoftwareState
-        fields = ('id', 'computer', 'software', 'is_active')
+        fields = ('id', 'sensors', 'network_adapters', 'position', 'world')
 
 
 class NetworkConnectionSerializer(serializers.HyperlinkedModelSerializer):
@@ -60,7 +54,7 @@ class SensorSerializer(serializers.HyperlinkedModelSerializer):
 class SoundSourceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SoundSource
-        fields = ('id', 'interval', 'state')
+        fields = ('id', 'interval', 'state', 'position', 'world')
 
 
 class WorldSerializer(serializers.HyperlinkedModelSerializer):
