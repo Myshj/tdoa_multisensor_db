@@ -54,6 +54,8 @@ class NetworkConnectionViewSet(viewsets.ModelViewSet):
 
 
 def reset(request):
+    count_of_sensors_in_row = 5
+
     Sensor.objects.all().delete()
     Position.objects.all().delete()
     Computer.objects.all().delete()
@@ -67,11 +69,11 @@ def reset(request):
     Position.objects.bulk_create([
                                      Position(
                                          x=i * 50,
-                                         y=j * 50,
+                                         y=j * 100 if j % 2 == 0 else j * 100 + 50,
                                          z=0.0
                                      )
-                                     for i in range(0, 10)
-                                     for j in range(0, 10)
+                                     for i in range(0, count_of_sensors_in_row)
+                                     for j in range(0, count_of_sensors_in_row)
                                      ])
     sensor_positions = Position.objects.all()
 
@@ -80,7 +82,7 @@ def reset(request):
                                    Sensor(
                                        world=world,
                                        position=sensor_positions[i]
-                                   ) for i in range(0, 100)
+                                   ) for i in range(0, count_of_sensors_in_row * count_of_sensors_in_row)
                                    ])
     sensors = Sensor.objects.all()
 
@@ -89,7 +91,7 @@ def reset(request):
                                            NetworkAdapter(
                                                world=world,
                                                position=sensor_positions[i]
-                                           ) for i in range(0, 100)
+                                           ) for i in range(0, count_of_sensors_in_row * count_of_sensors_in_row)
                                            ])
     sensor_controllers_network_adapters = NetworkAdapter.objects.all()
 
@@ -100,7 +102,7 @@ def reset(request):
                                          position=sensor_positions[i],
                                          is_active_sensor_controller=True,
                                          is_active_tdoa_controller=False
-                                     ) for i in range(0, 100)
+                                     ) for i in range(0, count_of_sensors_in_row * count_of_sensors_in_row)
                                      ])
     sensor_controllers = Computer.objects.all()
 
@@ -141,5 +143,14 @@ def reset(request):
                                                   possible_latency=latency_interval
                                               ) for sensor_controller in sensor_controllers
                                               ])
+
+    sound_source_position = Position(x=70, y=25)
+    sound_source_position.save()
+    sound_source = SoundSource(
+        position=sound_source_position,
+        world=world,
+        interval=10
+    )
+    sound_source.save()
 
     return redirect('/')

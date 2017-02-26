@@ -1,6 +1,7 @@
+from rest_framework import serializers
+
 from .models import (Position, Sensor, SoundSource, World, WorldRelated, NetworkAdapter, IntBound, Computer,
                      IntInterval, NetworkConnection)
-from rest_framework import serializers
 
 
 class PositionSerializer(serializers.HyperlinkedModelSerializer):
@@ -36,7 +37,8 @@ class IntIntervalSerializer(serializers.HyperlinkedModelSerializer):
 class ComputerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Computer
-        fields = ('id', 'sensors', 'network_adapters', 'position', 'world')
+        fields = ('id', 'sensors', 'network_adapters', 'position', 'world', 'is_active_sensor_controller',
+                  'is_active_tdoa_controller')
 
 
 class NetworkConnectionSerializer(serializers.HyperlinkedModelSerializer):
