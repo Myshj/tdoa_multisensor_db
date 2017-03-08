@@ -159,8 +159,8 @@ def reset(request):
                                               ])
 
     # СОЗДАЛИ СОЕДИНЕНИЕ ОТ КОНТРОЛЛЕРА 5-К К ФИЛЬТРУ ПОТОКА СООБЩЕНИЙ О ПОЗИЦИЯХ
-    left_latency_bound = IntBound(value=30, bound_type='inclusive')
-    right_latency_bound = IntBound(value=150, bound_type='inclusive')
+    left_latency_bound = IntBound(value=50, bound_type='inclusive')
+    right_latency_bound = IntBound(value=60, bound_type='inclusive')
     left_latency_bound.save()
     right_latency_bound.save()
 
@@ -171,6 +171,7 @@ def reset(request):
         adapter_to=position_determinator_adapter,
         possible_latency=latency_interval
     )
+    conn.save()
 
     # СОЗДАЛИ ИСТОЧНИК ЗВУКА
     sound_source_position = Position(x=129, y=130)
