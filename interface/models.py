@@ -88,6 +88,7 @@ class Computer(WorldRelated):
 
     is_active_sensor_controller = models.BooleanField(default=False)
     is_active_tdoa_controller = models.BooleanField(default=False)
+    is_active_position_determinator = models.BooleanField(default=False)
 
     def __str__(self):
         return 'Computer(position={0})'.format(self.position)

@@ -127,6 +127,20 @@ def reset(request):
     tdoa_controller_server.network_adapters.add(tdoa_controller_adapter)
     tdoa_controller_server.save()
 
+    # СОЗДАЛИ СЕРВЕР-ФИЛЬТР ПОТОКА СООБЩЕНИЙ О ПОЗИЦИЯХ
+    position_determinator_positiion = Position(x=888888, y=888888, z=0)
+    position_determinator_positiion.save()
+    position_determinator_adapter = NetworkAdapter(world=world, position=position_determinator_positiion)
+    position_determinator_adapter.save()
+    position_determinator_server = Computer(
+        world=world,
+        position=position_determinator_positiion,
+        is_active_position_determinator=True
+    )
+    position_determinator_server.save()
+    position_determinator_server.network_adapters.add(position_determinator_adapter)
+    position_determinator_server.save()
+
     # СОЗДАЛИ СОЕДИНЕНИЯ ОТ ДАТЧИКОВ К КОНТРОЛЛЕРУ 5-К
     left_latency_bound = IntBound(value=30, bound_type='inclusive')
     right_latency_bound = IntBound(value=150, bound_type='inclusive')
@@ -144,7 +158,22 @@ def reset(request):
                                               ) for sensor_controller in sensor_controllers
                                               ])
 
-    sound_source_position = Position(x=70, y=25)
+    # СОЗДАЛИ СОЕДИНЕНИЕ ОТ КОНТРОЛЛЕРА 5-К К ФИЛЬТРУ ПОТОКА СООБЩЕНИЙ О ПОЗИЦИЯХ
+    left_latency_bound = IntBound(value=30, bound_type='inclusive')
+    right_latency_bound = IntBound(value=150, bound_type='inclusive')
+    left_latency_bound.save()
+    right_latency_bound.save()
+
+    latency_interval = IntInterval(lower_bound=left_latency_bound, upper_bound=right_latency_bound)
+    latency_interval.save()
+    conn = NetworkConnection(
+        adapter_from=tdoa_controller_adapter,
+        adapter_to=position_determinator_adapter,
+        possible_latency=latency_interval
+    )
+
+    # СОЗДАЛИ ИСТОЧНИК ЗВУКА
+    sound_source_position = Position(x=129, y=130)
     sound_source_position.save()
     sound_source = SoundSource(
         position=sound_source_position,
