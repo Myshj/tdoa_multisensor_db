@@ -38,7 +38,7 @@ class ComputerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Computer
         fields = ('id', 'sensors', 'network_adapters', 'position', 'world', 'is_active_sensor_controller',
-                  'is_active_tdoa_controller')
+                  'is_active_tdoa_controller', 'is_active_position_determinator')
 
 
 class NetworkConnectionSerializer(serializers.HyperlinkedModelSerializer):
